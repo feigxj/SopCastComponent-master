@@ -3,12 +3,11 @@ package com.laifeng.sopcastsdk.controller.audio;
 import android.annotation.TargetApi;
 import android.media.AudioRecord;
 
+import com.laifeng.sopcastsdk.audio.AudioProcessor;
+import com.laifeng.sopcastsdk.audio.AudioUtils;
 import com.laifeng.sopcastsdk.audio.OnAudioEncodeListener;
 import com.laifeng.sopcastsdk.configuration.AudioConfiguration;
 import com.laifeng.sopcastsdk.constant.SopCastConstant;
-import com.laifeng.sopcastsdk.audio.AudioProcessor;
-import com.laifeng.sopcastsdk.audio.AudioUtils;
-import com.laifeng.sopcastsdk.controller.audio.IAudioController;
 import com.laifeng.sopcastsdk.utils.SopCastLog;
 
 /**
@@ -49,16 +48,16 @@ public class NormalAudioController implements IAudioController {
         }
         mAudioProcessor = new AudioProcessor(mAudioRecord, mAudioConfiguration);
         mAudioProcessor.setAudioHEncodeListener(mListener);
-        mAudioProcessor.start();
+        mAudioProcessor.start();//run 开始音频采集
         mAudioProcessor.setMute(mMute);
     }
 
     public void stop() {
         SopCastLog.d(SopCastConstant.TAG, "Audio Recording stop");
-        if(mAudioProcessor != null) {
+        if (mAudioProcessor != null) {
             mAudioProcessor.stopEncode();
         }
-        if(mAudioRecord != null) {
+        if (mAudioRecord != null) {
             try {
                 mAudioRecord.stop();
                 mAudioRecord.release();
@@ -71,7 +70,7 @@ public class NormalAudioController implements IAudioController {
 
     public void pause() {
         SopCastLog.d(SopCastConstant.TAG, "Audio Recording pause");
-        if(mAudioRecord != null) {
+        if (mAudioRecord != null) {
             mAudioRecord.stop();
         }
         if (mAudioProcessor != null) {
@@ -81,7 +80,7 @@ public class NormalAudioController implements IAudioController {
 
     public void resume() {
         SopCastLog.d(SopCastConstant.TAG, "Audio Recording resume");
-        if(mAudioRecord != null) {
+        if (mAudioRecord != null) {
             mAudioRecord.startRecording();
         }
         if (mAudioProcessor != null) {
@@ -92,7 +91,7 @@ public class NormalAudioController implements IAudioController {
     public void mute(boolean mute) {
         SopCastLog.d(SopCastConstant.TAG, "Audio Recording mute: " + mute);
         mMute = mute;
-        if(mAudioProcessor != null) {
+        if (mAudioProcessor != null) {
             mAudioProcessor.setMute(mMute);
         }
     }
@@ -100,7 +99,7 @@ public class NormalAudioController implements IAudioController {
     @Override
     @TargetApi(16)
     public int getSessionId() {
-        if(mAudioRecord != null) {
+        if (mAudioRecord != null) {
             return mAudioRecord.getAudioSessionId();
         } else {
             return -1;

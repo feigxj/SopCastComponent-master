@@ -63,7 +63,7 @@ public class AudioEncoder {
         while (outputBufferIndex >= 0) {
             ByteBuffer outputBuffer = outputBuffers[outputBufferIndex];
             if (mListener != null) {
-                mListener.onAudioEncode(outputBuffer, mBufferInfo);
+                mListener.onAudioEncode(outputBuffer, mBufferInfo);//音频数据封装后的回调到StreamController
             }
             mMediaCodec.releaseOutputBuffer(outputBufferIndex, false);
             outputBufferIndex = mMediaCodec.dequeueOutputBuffer(mBufferInfo, 0);

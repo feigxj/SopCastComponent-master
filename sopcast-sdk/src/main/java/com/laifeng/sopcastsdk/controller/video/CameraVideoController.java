@@ -4,7 +4,6 @@ import android.os.Build;
 
 import com.laifeng.sopcastsdk.configuration.VideoConfiguration;
 import com.laifeng.sopcastsdk.constant.SopCastConstant;
-import com.laifeng.sopcastsdk.controller.video.IVideoController;
 import com.laifeng.sopcastsdk.utils.SopCastLog;
 import com.laifeng.sopcastsdk.video.MyRecorder;
 import com.laifeng.sopcastsdk.video.MyRenderer;
@@ -40,20 +39,20 @@ public class CameraVideoController implements IVideoController {
     }
 
     public void start() {
-        if(mListener == null) {
+        if (mListener == null) {
             return;
         }
         SopCastLog.d(SopCastConstant.TAG, "Start video recording");
         mRecorder = new MyRecorder(mVideoConfiguration);
         mRecorder.setVideoEncodeListener(mListener);
         mRecorder.prepareEncoder();
-        mRenderer.setRecorder(mRecorder);
+        mRenderer.setRecorder(mRecorder);//设置视频源
     }
 
     public void stop() {
         SopCastLog.d(SopCastConstant.TAG, "Stop video recording");
         mRenderer.setRecorder(null);
-        if(mRecorder != null) {
+        if (mRecorder != null) {
             mRecorder.setVideoEncodeListener(null);
             mRecorder.stop();
             mRecorder = null;
@@ -62,14 +61,14 @@ public class CameraVideoController implements IVideoController {
 
     public void pause() {
         SopCastLog.d(SopCastConstant.TAG, "Pause video recording");
-        if(mRecorder != null) {
+        if (mRecorder != null) {
             mRecorder.setPause(true);
         }
     }
 
     public void resume() {
         SopCastLog.d(SopCastConstant.TAG, "Resume video recording");
-        if(mRecorder != null) {
+        if (mRecorder != null) {
             mRecorder.setPause(false);
         }
     }
@@ -80,7 +79,7 @@ public class CameraVideoController implements IVideoController {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             //由于重启硬编编码器效果不好，此次不做处理
             SopCastLog.d(SopCastConstant.TAG, "Bps need change, but MediaCodec do not support.");
-        }else {
+        } else {
             if (mRecorder != null) {
                 SopCastLog.d(SopCastConstant.TAG, "Bps change, current bps: " + bps);
                 mRecorder.setRecorderBps(bps);
